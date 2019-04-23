@@ -11,6 +11,7 @@ import com.tenor.android.core.constant.ScreenDensity;
 import com.tenor.android.core.constant.StringConstant;
 import com.tenor.android.core.constant.ViewAction;
 import com.tenor.android.core.measurable.MeasurableViewHolderEvent;
+import com.tenor.android.core.model.ContentFilter;
 import com.tenor.android.core.model.impl.Result;
 import com.tenor.android.core.response.WeakRefCallback;
 import com.tenor.android.core.response.impl.AnonIdResponse;
@@ -98,6 +99,18 @@ public class ApiClient {
      * content delivery experience
      */
     public static Map<String, String> getServiceIds(@NonNull final Context context) {
+        return getServiceIds(context, ContentFilter.off);
+    }
+
+    /**
+     * Get service ids that can delivery a more accurate and better experience
+     * Allows for content filtering
+     *
+     * @return a {@link Map} with {@code key} (API Key), {@code anon_id},
+     * {@code aaid} (Android Advertise Id) and {@code locale } for authentication and better
+     * content delivery experience
+     */
+    public static Map<String, String> getServiceIds(@NonNull final Context context, @NonNull final ContentFilter contentFilter) {
         final ArrayMap<String, String> map = new ArrayMap<>(4);
 
         // API Key
@@ -110,6 +123,7 @@ public class ApiClient {
          * 2. `aaid`, Android Advertise Id, is also used in case "keyboardid" or "anon_id" mutates
          * 3. `locale` is used to deliver curated language/regional specific contents to users
          * 4. `screen_density` is used to optimize the content size to the device
+         * 5. 'contentfilter' is used to specify the content safety filter level
          */
         final String id = AbstractSessionUtils.getAnonId(context);
         map.put(id.length() <= 20 ? "keyboardid" : "anon_id", id);
@@ -119,6 +133,7 @@ public class ApiClient {
         map.put("aaid", AbstractSessionUtils.getAndroidAdvertiseId(context));
         map.put("locale", AbstractLocaleUtils.getCurrentLocaleName(context));
         map.put("screen_density", ScreenDensity.get(context));
+        map.put("contentfilter", contentFilter.name());
         return map;
     }
 
