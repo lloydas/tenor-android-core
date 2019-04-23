@@ -15,6 +15,9 @@ public class Image implements Serializable {
     private static final long serialVersionUID = -8616498739266612929L;
     private String url;
 
+    @SerializedName("size")
+    private long size;
+
     @SerializedName("dims")
     private int[] dimensions;
 
@@ -25,6 +28,7 @@ public class Image implements Serializable {
     public String getUrl() {
         return StringConstant.getOrEmpty(url);
     }
+
 
     public int getWidth() {
         return dimensions != null && dimensions.length == 2 ? dimensions[0] : -1;
@@ -41,5 +45,12 @@ public class Image implements Serializable {
     public float getAspectRatio() {
         final float aspectRatio = (float) getWidth() / getHeight();
         return aspectRatio >= 0.01f && aspectRatio <= 5.01f ? aspectRatio : 1.778f;
+    }
+
+    /**
+     * @return size of this {@link Image} or -1 if it doesn't exist
+     */
+    public long getSize() {
+        return size != 0 ? size : -1;
     }
 }

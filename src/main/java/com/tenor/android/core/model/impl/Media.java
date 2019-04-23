@@ -11,6 +11,7 @@ public class Media extends Image {
     private static final long serialVersionUID = -8616498739266612929L;
     private String preview;
     private double duration;
+    private long size;
 
     /**
      * @return url of a static image preview
@@ -25,5 +26,12 @@ public class Media extends Image {
      */
     public double getDuration() {
         return duration;
+    }
+
+    /**
+     * @return size of this {@link Image} or -1 if it doesn't exist
+     */
+    public long getSize() {
+        return size != 0 ? size : -1;
     }
 }
